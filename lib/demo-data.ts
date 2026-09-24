@@ -1,6 +1,6 @@
 import type { VoteRow } from "./dhondt";
 
-export const totalPrecincts = 131;
+export const totalPrecincts = 104;
 export const processedPrecincts = 0;
 export const initialVoteRows: VoteRow[] = [
   { id: "l1", label: "STAROSTOVÉ A NEZÁVISLÍ", votes: 0, colour: "#b51c32" },

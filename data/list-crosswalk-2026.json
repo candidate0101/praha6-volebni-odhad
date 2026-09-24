@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "status": "draft - politickou interpretaci musi potvrdit tym pred ostrym pouzitim",
+  "current_lists": [
+    {
+      "id": "l1",
+      "ballotNumber": 1,
+      "name": "STAROSTOVE A NEZAVISLI",
+      "refs2022": { "mode": "koalice-rozdelit", "ballotNumbers": [9], "weight": 1, "confidence": "nizka", "note": "2022 kandidovali jako STAN s podporou Zelenych" },
+      "refs2018": { "mode": "primy", "ballotNumbers": [1], "weight": 1, "confidence": "vysoka" }
+    },
+    {
+      "id": "l2",
+      "ballotNumber": 2,
+      "name": "GEN",
+      "refs2022": { "mode": "novy subjekt", "ballotNumbers": [], "weight": 0, "confidence": "vysoka" },
+      "refs2018": { "mode": "novy subjekt", "ballotNumbers": [], "weight": 0, "confidence": "vysoka" }
+    },
+    {
+      "id": "l3",
+      "ballotNumber": 3,
+      "name": "Komunisticka strana Cech a Moravy",
+      "refs2022": { "mode": "primy", "ballotNumbers": [3], "weight": 1, "confidence": "vysoka" },
+      "refs2018": { "mode": "primy", "ballotNumbers": [7], "weight": 1, "confidence": "vysoka" }
+    },
+    {
+      "id": "l4",
+      "ballotNumber": 4,
+      "name": "Ceska piratska strana",
+      "refs2022": { "mode": "primy", "ballotNumbers": [1], "weight": 1, "confidence": "vysoka" },
+      "refs2018": { "mode": "primy", "ballotNumbers": [8], "weight": 1, "confidence": "vysoka" }
+    },
+    {
+      "id": "l5",
+      "ballotNumber": 5,
+      "name": "SPD s podporou Trikolory a PRO",
+      "refs2022": { "mode": "koalice-rozdelit", "ballotNumbers": [2], "weight": 1, "confidence": "stredni", "note": "2022 Trikolora + SPD + nezavisli kandidati" },
+      "refs2018": { "mode": "koalice-rozdelit", "ballotNumbers": [4], "weight": 1, "confidence": "stredni", "note": "2018 SPD samostatne" }
+    },
+    {
+      "id": "l6",
+      "ballotNumber": 6,
+      "name": "PRAHA 6 SOBE",
+      "refs2022": { "mode": "primy", "ballotNumbers": [4], "weight": 1, "confidence": "vysoka" },
+      "refs2018": { "mode": "novy subjekt", "ballotNumbers": [], "weight": 0, "confidence": "stredni" }
+    },
+    {
+      "id": "l7",
+      "ballotNumber": 7,
+      "name": "ODS a KDU-CSL",
+      "refs2022": { "mode": "primy", "ballotNumbers": [6], "weight": 1, "confidence": "vysoka" },
+      "refs2018": { "mode": "koalice-rozdelit", "ballotNumbers": [9, 10], "weight": 0.5, "confidence": "nizka", "note": "2018 ODS samostatne (10) a KLID KDU-CSL+TOP09 (9); podil KDU-CSL v KLID odhadnut na polovinu" }
+    },
+    {
+      "id": "l8",
+      "ballotNumber": 8,
+      "name": "ANO 2011",
+      "refs2022": { "mode": "primy", "ballotNumbers": [10], "weight": 1, "confidence": "vysoka" },
+      "refs2018": { "mode": "primy", "ballotNumbers": [6], "weight": 1, "confidence": "vysoka" }
+    },
+    {
+      "id": "l9",
+      "ballotNumber": 9,
+      "name": "TOP 09",
+      "refs2022": { "mode": "primy", "ballotNumbers": [8], "weight": 1, "confidence": "vysoka" },
+      "refs2018": { "mode": "koalice-rozdelit", "ballotNumbers": [9], "weight": 0.5, "confidence": "nizka", "note": "2018 KLID KDU-CSL+TOP09; podil TOP09 odhadnut na polovinu" }
+    },
+    {
+      "id": "l10",
+      "ballotNumber": 10,
+      "name": "Motoriste sobe a Svobodni",
+      "refs2022": { "mode": "novy subjekt", "ballotNumbers": [], "weight": 0, "confidence": "stredni" },
+      "refs2018": { "mode": "novy subjekt", "ballotNumbers": [], "weight": 0, "confidence": "stredni" }
+    },
+    {
+      "id": "l11",
+      "ballotNumber": 11,
+      "name": "JSME PRAHA 6",
+      "refs2022": { "mode": "novy subjekt", "ballotNumbers": [], "weight": 0, "confidence": "vysoka" },
+      "refs2018": { "mode": "novy subjekt", "ballotNumbers": [], "weight": 0, "confidence": "vysoka" }
+    }
+  ]
+}

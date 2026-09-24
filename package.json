@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "import:history": "python3 scripts/import_historical_precincts.py",
+    "import:history": "python3 scripts/import_historical_precincts.py && python3 scripts/build_forecast_basis.py",
     "test": "vitest run"
   },
   "dependencies": {
