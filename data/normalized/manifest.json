@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "imports": [
+    {
+      "year": 2018,
+      "file": "praha6-kv2018-precincts.json",
+      "precinct_count": 104,
+      "list_count": 11,
+      "valid_votes": 1648147
+    },
+    {
+      "year": 2022,
+      "file": "praha6-kv2022-precincts.json",
+      "precinct_count": 104,
+      "list_count": 10,
+      "valid_votes": 1531307
+    }
+  ]
+}

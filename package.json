@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "import:history": "python3 scripts/import_historical_precincts.py"
   },
   "dependencies": {
     "next": "^16.3.6",
