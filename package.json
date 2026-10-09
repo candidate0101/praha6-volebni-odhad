@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "import:history": "python3 scripts/import_historical_precincts.py && python3 scripts/build_forecast_basis.py",
+    "import:history": "python3 scripts/import_historical_precincts.py && python3 scripts/build_forecast_basis.py && python3 scripts/build_precinct_history.py",
     "test": "vitest run",
     "import:official": "node --env-file-if-exists=.env.local scripts/import-official-results.ts",
     "db:official:apply": "node --env-file-if-exists=.env.local scripts/apply-schema.ts official",

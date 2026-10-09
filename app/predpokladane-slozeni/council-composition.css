@@ -1,4 +1,4 @@
-.council-source { display: grid; gap: var(--space-3); margin: var(--space-5) 0 0; }
+.council-source { display: grid; gap: var(--space-3); margin: 0 0 var(--space-6); }
 .council-columns { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); }
 .seat-grid { display: grid; grid-template-columns: repeat(15, minmax(0, 1fr)); gap: 4px; margin: var(--space-2) 0 var(--space-4); }
 .seat-grid i { aspect-ratio: 1; border-radius: 50%; box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.7); }

@@ -32,6 +32,14 @@ describe("the three labelled outputs", () => {
     expect(outputById("official").sourceLine).toMatch(/ČSÚ/);
   });
 
+  it("names the three working modes Briefing, ČSÚ and Složení, each with a context line for its short name", () => {
+    expect(OUTPUTS.map((output) => output.shortLabel)).toEqual(["Briefing", "ČSÚ", "Složení"]);
+    for (const output of OUTPUTS) {
+      expect(output.navHint.trim()).not.toBe("");
+      expect(output.label).not.toBe(output.shortLabel);
+    }
+  });
+
   it("never says a candidate is definitively elected", () => {
     expect(ELECTED_STATUS_LABEL).toBe("předpokládaně zvolen/a");
     expect(JSON.stringify(OUTPUTS).toLowerCase()).not.toContain("definitivně zvolen");

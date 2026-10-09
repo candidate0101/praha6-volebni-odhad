@@ -25,20 +25,50 @@ export function leaderColour(listId: string | null): string {
 }
 
 export type PrecinctFlag = "discrepancy" | "pending";
+export type MapView = "leader" | "status";
+export type PrecinctState = "unreported" | "leader" | "tie" | "discrepancy" | "pending";
+
+// Fill for every processed precinct in the processing view; deliberately not a party colour.
+export const PROCESSED_STATUS_COLOUR = "#4b6a8f";
 
 export type PrecinctAppearance = {
   fill: string;
   leaderId: string | null;
   // Non-colour cue drawn over the fill: hatch = discrepancy to verify, dots = unsent manual entry.
   pattern: "hatch" | "dots" | null;
+  // Unreported precincts get a dashed outline so "no result yet" is visible without colour.
+  outline: "dashed" | "solid";
+  state: PrecinctState;
   label: string;
 };
 
-export function precinctAppearance(entry: { listVotes: number[] } | undefined, flag?: PrecinctFlag): PrecinctAppearance {
-  if (flag === "discrepancy") return { fill: UNREPORTED_COLOUR, leaderId: null, pattern: "hatch", label: "rozpor k ověření" };
-  if (!entry) return { fill: UNREPORTED_COLOUR, leaderId: null, pattern: null, label: "bez výsledku" };
+export function precinctAppearance(entry: { listVotes: number[] } | undefined, flag?: PrecinctFlag, view: MapView = "leader"): PrecinctAppearance {
+  if (flag === "discrepancy") return { fill: UNREPORTED_COLOUR, leaderId: null, pattern: "hatch", outline: "solid", state: "discrepancy", label: "rozpor k ověření" };
+  if (!entry) return { fill: UNREPORTED_COLOUR, leaderId: null, pattern: null, outline: "dashed", state: "unreported", label: "bez výsledku" };
   const leaderId = leadingListId(entry.listVotes);
   const base = leaderId ? null : "shoda na prvním místě";
-  if (flag === "pending") return { fill: leaderColour(leaderId), leaderId, pattern: "dots", label: `${base ?? "vede listina"} · neodesláno` };
-  return { fill: leaderColour(leaderId), leaderId, pattern: null, label: base ?? "vede listina" };
+  const fill = view === "status" ? PROCESSED_STATUS_COLOUR : leaderColour(leaderId);
+  if (flag === "pending") return { fill, leaderId, pattern: "dots", outline: "solid", state: "pending", label: `${base ?? "vede listina"} · neodesláno` };
+  return { fill, leaderId, pattern: null, outline: "solid", state: leaderId ? "leader" : "tie", label: base ?? "vede listina" };
+}
+
+type MapEntry = { number: number; listVotes: number[] };
+
+export function summarizeMap(entries: MapEntry[], flags: ReadonlyMap<number, PrecinctFlag>, totalPrecincts: number) {
+  const flagged = [...flags.values()];
+  const discrepancy = flagged.filter((flag) => flag === "discrepancy").length;
+  const processed = entries.filter((entry) => flags.get(entry.number) !== "discrepancy").length;
+  return { processed, unreported: Math.max(0, totalPrecincts - processed - discrepancy), discrepancy, pending: flagged.filter((flag) => flag === "pending").length };
+}
+
+// Only the lists that actually lead a precinct, so the legend stays short during the night.
+export function leaderLegend(entries: MapEntry[], flags: ReadonlyMap<number, PrecinctFlag>): { id: string; colour: string; count: number }[] {
+  const counts = new Map<string, number>();
+  for (const entry of entries) {
+    if (flags.get(entry.number) === "discrepancy") continue;
+    const leaderId = leadingListId(entry.listVotes);
+    if (leaderId) counts.set(leaderId, (counts.get(leaderId) ?? 0) + 1);
+  }
+  const order = (id: string) => Number(id.slice(1));
+  return [...counts].sort(([left, a], [right, b]) => b - a || order(left) - order(right)).map(([id, count]) => ({ id, colour: leaderColour(id), count }));
 }

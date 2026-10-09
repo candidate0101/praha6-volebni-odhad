@@ -9,7 +9,8 @@ import { validateSubmission } from "../lib/precinct-submission";
 import { PRAHA6 } from "../lib/praha6";
 import { BriefingAccessGate, useTeamSession } from "./briefing-access-gate";
 import { PrecinctMap } from "./precinct-map";
-import { AppShell, EmptyState, Kpi, ListName, Notice, SourceTag, StateTag } from "./ui";
+import { ageLabel, latestIso } from "../lib/data-status";
+import { AppShell, EmptyState, Kpi, ListName, Notice, SourceTag, StateTag, useNow } from "./ui";
 import { useManualEntries, type ManualSyncMode } from "./use-manual-entries";
 
 const formatNumber = new Intl.NumberFormat("cs-CZ");
@@ -45,6 +46,7 @@ function Briefing() {
   const [editingPrecinct, setEditingPrecinct] = useState<string | null>(null);
   const [editingRevision, setEditingRevision] = useState<number | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const now = useNow();
 
   const listIds = initialVoteRows.map((row) => row.id);
   const completed = entries.length;
@@ -122,6 +124,7 @@ function Briefing() {
     resetEntryForm(); setShowEntry(false);
   }
 
+  const lastChange = latestIso([...sync.revisions.map((revision) => revision.createdAt), ...sync.outbox.map((item) => item.queuedAt)]);
   const pendingNumbers = new Set(sync.outbox.map((item) => item.change.precinctNumber));
   const mapFlags = new Map([...pendingNumbers].map((number) => [number, "pending" as const]));
   const syncTone = sync.mode === "server" && sync.outbox.length === 0 ? "ok" : sync.mode === "loading" ? "wait" : sync.mode === "local_only" ? "info" : "warn";
@@ -134,7 +137,8 @@ function Briefing() {
   return <AppShell output="briefing" status={<StateTag tone={syncTone === "info" ? "wait" : syncTone}>{MODE_LABEL[sync.mode]}</StateTag>}>
     <div className="hero">
       <div className="eyebrow">Komunální volby 2026 · interní volební briefing</div>
-      <h1 className="title">Výsledek se zpřesňuje. <em>Zatím nevyhlašujeme vítěze.</em></h1>
+      <h1 className="title">Výsledek se zpřesňuje</h1>
+      <p className="title-sub">Zatím nevyhlašujeme vítěze.</p>
       <p className="lead">Ruční zápisy z okrskových komisí a modelovaný odhad. Nic z této stránky není oficiální výsledek; oficiální data ČSÚ jsou na samostatné stránce a sem nevstupují.</p>
     </div>
 
@@ -147,15 +151,16 @@ function Briefing() {
     </Notice>
 
     <section className="kpis" aria-label="Souhrn ručních zápisů">
-      <Kpi label="Zadané okrsky" value={`${completed} / ${totalPrecincts}`} note={<><SourceTag kind="manual" /></>} accent />
-      <Kpi label="Sečteno okrsků" value={`${formatPercent(coverage)} %`} />
-      <Kpi label="Platné hlasy" value={formatNumber.format(totalVotes)} />
-      <Kpi label="Jistota modelu" value={forecast ? forecast.confidenceLabel : "vypnuto"} note={forecast ? "není pravděpodobnost výsledku" : "zapne se po 1. okrsku"} />
+      <Kpi primary label="Zadané okrsky" value={`${completed} / ${totalPrecincts}`} note={<>{formatPercent(coverage)} % okrsků · <SourceTag kind="manual" /></>} />
+      <Kpi label="Poslední změna" value={formatClock(lastChange)} note={lastChange ? `${ageLabel(lastChange, now)} · synchronizace ${formatClock(sync.lastSyncAt)}` : completed ? "čas změny se v místním režimu neukládá" : "zatím žádný zápis"} />
+      <Kpi label="Konflikty · neodesláno" value={`${sync.conflicts.length} · ${sync.outbox.length}`} tone={sync.conflicts.length ? "danger" : sync.outbox.length || sync.mode === "offline" || sync.mode === "signed_out" || sync.mode === "local_only" ? "warn" : sync.mode === "server" ? "ok" : "wait"}
+        note={sync.conflicts.length ? `konflikt: ${sync.conflicts.map((conflict) => conflict.precinctNumber).join(", ")}` : sync.outbox.length ? "čeká na odeslání na server" : sync.mode === "server" ? "vše uloženo na serveru" : sync.mode === "local_only" ? "uloženo jen v tomto prohlížeči" : sync.mode === "loading" ? "načítám stav" : "server teď nepotvrzuje uložení"} />
+      <Kpi label="Platné hlasy" value={formatNumber.format(totalVotes)} note={forecast ? `jistota modelu: ${forecast.confidenceLabel}` : "model se zapne po 1. okrsku"} />
     </section>
 
     <div className="columns">
       <div className="stack">
-        <PrecinctMap entries={entries} flags={mapFlags} onEditPrecinct={startEdit} badge={<SourceTag kind="manual" />} description="Okrsky se vybarví podle listiny vedoucí v ručním zápisu. Bez zápisu a při shodě na prvním místě zůstávají neutrální; neodeslané zápisy mají tečkovaný vzor." />
+        <PrecinctMap entries={entries} flags={mapFlags} onEditPrecinct={startEdit} badge={<SourceTag kind="manual" />} updatedLabel={lastChange ? `poslední zápis ${formatClock(lastChange)}` : completed ? "místní zápisy bez času" : "zatím bez zápisu"} description="Okrsky se vybarví podle listiny vedoucí v ručním zápisu. Okrsky bez zápisu mají čárkovaný obrys, shoda na prvním místě zůstává neutrální a neodeslané zápisy mají tečky." />
 
         <section className="panel" aria-labelledby="current-title">
           <div className="section-head"><h2 className="sectiontitle" id="current-title">Skutečný dosavadní stav</h2><SourceTag kind="manual" /></div>
