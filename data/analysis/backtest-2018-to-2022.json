@@ -1,0 +1,444 @@
+{
+  "scope": "2018_to_2022_stress_test",
+  "warning": "Historical stress test; not a calibrated 2026 forecast.",
+  "comparable_lists": {
+    "Piráti": [
+      1,
+      8
+    ],
+    "ANO": [
+      10,
+      6
+    ],
+    "KSČM": [
+      3,
+      7
+    ]
+  },
+  "stages": [
+    1,
+    5,
+    10,
+    25,
+    50,
+    75
+  ],
+  "results": {
+    "po_cisle": {
+      "1": {
+        "Piráti": {
+          "predicted_share": 0.12846134856351132,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 1.8535302010148942
+        },
+        "ANO": {
+          "predicted_share": 0.2109353766534009,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 0.6807375126614473
+        },
+        "KSČM": {
+          "predicted_share": 0.023913482171187092,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.13921980655178834
+        }
+      },
+      "5": {
+        "Piráti": {
+          "predicted_share": 0.11859527628651266,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 2.8401374287147605
+        },
+        "ANO": {
+          "predicted_share": 0.21648939397702752,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 0.12533578029878534
+        },
+        "KSČM": {
+          "predicted_share": 0.02476740173495247,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.22461176292832596
+        }
+      },
+      "10": {
+        "Piráti": {
+          "predicted_share": 0.1329861664176454,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 1.4010484156014857
+        },
+        "ANO": {
+          "predicted_share": 0.21655631094568417,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 0.11864408343311983
+        },
+        "KSČM": {
+          "predicted_share": 0.018995382109466146,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.35259019962030624
+        }
+      },
+      "25": {
+        "Piráti": {
+          "predicted_share": 0.13970202444543622,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 0.7294626128224041
+        },
+        "ANO": {
+          "predicted_share": 0.22149156675759316,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 0.37488149775777857
+        },
+        "KSČM": {
+          "predicted_share": 0.019753777468170742,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.2767506637498467
+        }
+      },
+      "50": {
+        "Piráti": {
+          "predicted_share": 0.14569811088274362,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 0.12985396909166447
+        },
+        "ANO": {
+          "predicted_share": 0.22048820766843938,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 0.2745455888424009
+        },
+        "KSČM": {
+          "predicted_share": 0.022858037566101767,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.03367534604325588
+        }
+      },
+      "75": {
+        "Piráti": {
+          "predicted_share": 0.14866970133482163,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 0.16730507611613654
+        },
+        "ANO": {
+          "predicted_share": 0.22086565153132848,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 0.31228997513131074
+        },
+        "KSČM": {
+          "predicted_share": 0.023371283564976645,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.08499994593074364
+        }
+      }
+    },
+    "obracene_po_cisle": {
+      "1": {
+        "Piráti": {
+          "predicted_share": 0.12700004157712327,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 1.999660899653699
+        },
+        "ANO": {
+          "predicted_share": 0.20313158137640075,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 1.461117040361462
+        },
+        "KSČM": {
+          "predicted_share": 0.026593537364068574,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.4072253258399366
+        }
+      },
+      "5": {
+        "Piráti": {
+          "predicted_share": 0.13196031139269757,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 1.50363391809627
+        },
+        "ANO": {
+          "predicted_share": 0.1994917610548986,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 1.8250990725116767
+        },
+        "KSČM": {
+          "predicted_share": 0.022026911111719377,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.0494372993949832
+        }
+      },
+      "10": {
+        "Piráti": {
+          "predicted_share": 0.14374830195001864,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 0.32483486236416226
+        },
+        "ANO": {
+          "predicted_share": 0.19864866596243905,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 1.9094085817576323
+        },
+        "KSČM": {
+          "predicted_share": 0.017257978406796312,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.5263305698872897
+        }
+      },
+      "25": {
+        "Piráti": {
+          "predicted_share": 0.1445193350024043,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 0.2477315571255967
+        },
+        "ANO": {
+          "predicted_share": 0.20719982778832663,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 1.0542923991688742
+        },
+        "KSČM": {
+          "predicted_share": 0.018406888481525743,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.4114395624143466
+        }
+      },
+      "50": {
+        "Piráti": {
+          "predicted_share": 0.14401509172450253,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 0.29815588491577394
+        },
+        "ANO": {
+          "predicted_share": 0.2120256401469683,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 0.5717111633047056
+        },
+        "KSČM": {
+          "predicted_share": 0.022626381822056788,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.010509771638757964
+        }
+      },
+      "75": {
+        "Piráti": {
+          "predicted_share": 0.14700096298225507,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 0.00043124085948031965
+        },
+        "ANO": {
+          "predicted_share": 0.21470476409722825,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 0.30379876827871244
+        },
+        "KSČM": {
+          "predicted_share": 0.023555975633639127,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.10346915279699186
+        }
+      }
+    },
+    "nejvetsi_nejdrive": {
+      "1": {
+        "Piráti": {
+          "predicted_share": 0.13657553928680077,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 1.0421111286859492
+        },
+        "ANO": {
+          "predicted_share": 0.20422209282960924,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 1.3520658950406133
+        },
+        "KSČM": {
+          "predicted_share": 0.02685440223452334,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.43331181288541326
+        }
+      },
+      "5": {
+        "Piráti": {
+          "predicted_share": 0.14479519352819192,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 0.22014570454683413
+        },
+        "ANO": {
+          "predicted_share": 0.20874868590427845,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 0.8994065875736923
+        },
+        "KSČM": {
+          "predicted_share": 0.0315656765706659,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.9044392464996689
+        }
+      },
+      "10": {
+        "Piráti": {
+          "predicted_share": 0.15056164067549663,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 0.3564990101836363
+        },
+        "ANO": {
+          "predicted_share": 0.21211870038845362,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 0.5624051391561746
+        },
+        "KSČM": {
+          "predicted_share": 0.02979162005994923,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.7270335954280023
+        }
+      },
+      "25": {
+        "Piráti": {
+          "predicted_share": 0.155464265504317,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 0.846761493065673
+        },
+        "ANO": {
+          "predicted_share": 0.21750983860688525,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 0.02329131731301226
+        },
+        "KSČM": {
+          "predicted_share": 0.02875186793463743,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.6230583828968221
+        }
+      },
+      "50": {
+        "Piráti": {
+          "predicted_share": 0.14650932712191903,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 0.04873234517412395
+        },
+        "ANO": {
+          "predicted_share": 0.21817369630174543,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 0.04309445217300645
+        },
+        "KSČM": {
+          "predicted_share": 0.02582730593050317,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.33060218248339607
+        }
+      },
+      "75": {
+        "Piráti": {
+          "predicted_share": 0.1470917693265039,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 0.009511875284362592
+        },
+        "ANO": {
+          "predicted_share": 0.21866799580734064,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 0.09252440273252727
+        },
+        "KSČM": {
+          "predicted_share": 0.02485148172589306,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.23301976202238506
+        }
+      }
+    },
+    "deterministicky_nahodne": {
+      "1": {
+        "Piráti": {
+          "predicted_share": 0.13994575197527667,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 0.7050898598383593
+        },
+        "ANO": {
+          "predicted_share": 0.1972764733965207,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 2.046627838349466
+        },
+        "KSČM": {
+          "predicted_share": 0.02458202865572054,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.20607445500513305
+        }
+      },
+      "5": {
+        "Piráti": {
+          "predicted_share": 0.14484826129478437,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 0.21483892788758951
+        },
+        "ANO": {
+          "predicted_share": 0.20785546831723792,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 0.9887283462777452
+        },
+        "KSČM": {
+          "predicted_share": 0.025093242310213256,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.25719582045440476
+        }
+      },
+      "10": {
+        "Piráti": {
+          "predicted_share": 0.1525062845320143,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 0.5509633958354049
+        },
+        "ANO": {
+          "predicted_share": 0.21738342073613023,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 0.035933104388513604
+        },
+        "KSČM": {
+          "predicted_share": 0.026114893446423263,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.3593609340754055
+        }
+      },
+      "25": {
+        "Piráti": {
+          "predicted_share": 0.14882847923730294,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 0.18318286636426762
+        },
+        "ANO": {
+          "predicted_share": 0.2206502969235517,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 0.2907545143536333
+        },
+        "KSČM": {
+          "predicted_share": 0.026403104375112302,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.38818202694430937
+        }
+      },
+      "50": {
+        "Piráti": {
+          "predicted_share": 0.1481525874882855,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 0.1155936914625233
+        },
+        "ANO": {
+          "predicted_share": 0.22019311681145534,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 0.24503650314399716
+        },
+        "KSČM": {
+          "predicted_share": 0.02232989220105966,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.019139190460954955
+        }
+      },
+      "75": {
+        "Piráti": {
+          "predicted_share": 0.14852876223894393,
+          "actual_share": 0.14699665057366026,
+          "absolute_error_pp": 0.15321116652836642
+        },
+        "ANO": {
+          "predicted_share": 0.2160099532450422,
+          "actual_share": 0.21774275178001537,
+          "absolute_error_pp": 0.17327985349731567
+        },
+        "KSČM": {
+          "predicted_share": 0.020349561922615472,
+          "actual_share": 0.02252128410566921,
+          "absolute_error_pp": 0.21717221830537364
+        }
+      }
+    }
+  }
+}

@@ -25,6 +25,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run test
+      # The static preview has no server: drop the live official-results API so the export
+      # builds, and the page states that no live connection exists there.
+      - run: rm -rf app/api
       - run: npm run build
         env:
           GITHUB_ACTIONS: "true"
