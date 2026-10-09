@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
   basePath: isGitHubPages ? repositoryBasePath : undefined,
   assetPrefix: isGitHubPages ? repositoryBasePath : undefined,
   trailingSlash: isGitHubPages,
+  // Local test mode only (MANUAL_ENTRIES_DATABASE_URL=pglite:...): load PGlite from node_modules at runtime.
+  serverExternalPackages: ["@electric-sql/pglite"],
 };
 
 export default nextConfig;

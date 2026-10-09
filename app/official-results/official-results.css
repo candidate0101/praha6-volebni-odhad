@@ -1,0 +1,12 @@
+.official-table { display: grid; font-size: 14px; }
+.official-table-row { display: grid; grid-template-columns: 0.5fr 0.9fr 1.6fr 0.7fr 1.5fr; gap: var(--space-3); padding: 10px 0; border-bottom: 1px solid var(--line); align-items: baseline; overflow-wrap: anywhere; }
+.official-table-head { font: 700 12px/1.3 var(--font-sans); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.official-hash { font-family: ui-monospace, Menlo, monospace; font-size: 12px; }
+.forecast-compact { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+@media (max-width: 760px) {
+  .official-table-head { display: none; }
+  .official-table-row { grid-template-columns: auto 1fr; gap: 4px var(--space-3); }
+  .official-table-row > :nth-child(3), .official-table-row > :nth-child(5) { grid-column: 1 / -1; }
+  .official-table-row [data-label]::before { content: attr(data-label) " "; color: var(--muted); font: 600 12px var(--font-sans); text-transform: uppercase; letter-spacing: 0.06em; }
+  .forecast-compact { grid-template-columns: 1fr; }
+}

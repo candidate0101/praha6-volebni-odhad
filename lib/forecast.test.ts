@@ -47,4 +47,11 @@ describe("computeForecast", () => {
     const totalSeats = forecast.lists.reduce((sum, list) => sum + list.pointSeats, 0);
     expect(totalSeats).toBe(45);
   });
+
+  it("reports vote coverage and historical representativeness separately from the forecast", () => {
+    const forecast = computeForecast(LIST_IDS, [{ number: 6001, validVotes: 2000, listVotes: [300, 0, 100, 400, 100, 200, 400, 200, 200, 50, 50] }], 45)!;
+    expect(forecast.coverageShare).toBeGreaterThan(0);
+    expect(forecast.coverageShare).toBeLessThan(1);
+    expect(Number.isFinite(forecast.representativenessGap)).toBe(true);
+  });
 });

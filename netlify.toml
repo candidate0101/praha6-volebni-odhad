@@ -1,0 +1,14 @@
+# Netlify deploy: Next.js pages and /api routes via Netlify's Next.js runtime (OpenNext),
+# plus the scheduled ČSÚ importer in netlify/functions.
+# Required environment variables (Site configuration → Environment variables):
+#   TEAM_PASSWORD, SESSION_SECRET, MANUAL_ENTRIES_DATABASE_URL, OFFICIAL_RESULTS_DATABASE_URL
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[functions]
+  directory = "netlify/functions"

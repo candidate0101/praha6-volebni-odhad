@@ -10,6 +10,7 @@
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -28,6 +29,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx",
+    "netlify/**/*.mts",
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [

@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "eslint .",
     "import:history": "python3 scripts/import_historical_precincts.py && python3 scripts/build_forecast_basis.py",
-    "test": "vitest run"
+    "test": "vitest run",
+    "import:official": "node --env-file-if-exists=.env.local scripts/import-official-results.ts",
+    "db:official:apply": "node --env-file-if-exists=.env.local scripts/apply-schema.ts official",
+    "db:manual:apply": "node --env-file-if-exists=.env.local scripts/apply-schema.ts manual"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
@@ -17,6 +20,7 @@
     "react-dom": "^19.2.4"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.8",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
