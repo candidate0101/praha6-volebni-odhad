@@ -8,7 +8,8 @@ import { allocateDhondt } from "../../lib/dhondt";
 import { computeForecast } from "../../lib/forecast";
 import { ELECTED_STATUS_LABEL } from "../../lib/outputs";
 import { BriefingAccessGate } from "../briefing-access-gate";
-import { AppShell, EmptyState, Kpi, ListName, Notice, SourceTag, StateTag } from "../ui";
+import { ageLabel, latestIso } from "../../lib/data-status";
+import { AppShell, EmptyState, Kpi, ListName, Notice, SourceTag, StateTag, useNow } from "../ui";
 import { useManualEntries } from "../use-manual-entries";
 import "./council-composition.css";
 
@@ -24,7 +25,9 @@ export default function CouncilCompositionPage() {
 
 function CouncilComposition() {
   // The same shared manual entries as the briefing on / (or this browser's, when no server store exists).
-  const { entries } = useManualEntries();
+  const { entries, revisions, outbox } = useManualEntries();
+  const now = useNow();
+  const lastChange = latestIso([...revisions.map((revision) => revision.createdAt), ...outbox.map((item) => item.queuedAt)]);
   const [sourceMode, setSourceMode] = useState<SourceMode>("model");
 
   const listIds = initialVoteRows.map((row) => row.id);
@@ -52,13 +55,21 @@ function CouncilComposition() {
   </>}>
     <div className="hero">
       <div className="eyebrow">Komunální volby 2026 · předpokládané složení</div>
-      <h1 className="title">Zastupitelstvo Prahy 6 · <em>pracovní odhad</em></h1>
-      <p className="lead">Převod průběžných nebo modelovaných listinných hlasů do 45 mandátů. Nejde o oficiální výsledek ani o samostatnou prognózu „Křišťálové koule“.</p>
+      <h1 className="title">Složení zastupitelstva</h1>
+      <p className="title-sub">Pracovní odhad 45 mandátů, ne výsledek.</p>
+      <p className="lead">Převod průběžných nebo modelovaných listinných hlasů na mandáty. Nejde o oficiální výsledek ani o samostatnou prognózu „Křišťálové koule“.</p>
     </div>
 
     <Notice tone="method" title="Odhad podle pořadí kandidátky; může se změnit vlivem preferenčních hlasů.">
       <span>Dokud nejsou k dispozici kandidátní hlasy, nelze žádnou konkrétní osobu označit za definitivně zvolenou. Každá osoba níže je „{ELECTED_STATUS_LABEL}“.</span>
     </Notice>
+
+    <section className="kpis" aria-label="Souhrn odhadu">
+      <Kpi primary label="Předpokládaně zvolených" value={`${elected.length} / 45`} note={<>z {entries.length} zapsaných okrsků · <SourceTag kind="estimate" /></>} />
+      <Kpi label="Vstup naposledy změněn" value={lastChange ? new Date(lastChange).toLocaleTimeString("cs-CZ", { hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "—"} note={lastChange ? `${ageLabel(lastChange, now)} · ${sourceMode === "model" ? "≈ model" : "✎ ruční zápisy"}` : entries.length ? "místní zápisy bez času" : "zatím žádný zápis"} />
+      <Kpi label="Kandidátní hlasy" value="nejsou" tone="warn" note="pořadí podle kandidátky; může se změnit" />
+      <Kpi label="Listin nad 5 %" value={allocation.filter((row) => row.qualified).length} note={`${sourceMode === "model" ? "≈ " : ""}${number.format(totalVotes)} vstupních hlasů`} />
+    </section>
 
     <section className="panel council-source" aria-labelledby="source-title">
       <h2 className="eyebrow" id="source-title">Zdroj listinných hlasů</h2>
@@ -67,13 +78,6 @@ function CouncilComposition() {
         <button aria-pressed={sourceMode === "current"} onClick={() => setSourceMode("current")}>✎ Průběžné ruční zápisy</button>
       </div>
       <p className="foot">Právě použito: <b>{sourceName}</b>. Oficiální výsledky ČSÚ se do tohoto odhadu nepromítají.</p>
-    </section>
-
-    <section className="kpis" aria-label="Souhrn odhadu">
-      <Kpi label="Mandátů" value="45" note={<SourceTag kind="estimate" />} accent />
-      <Kpi label="Vstupních hlasů" value={number.format(totalVotes)} note={sourceMode === "model" ? "≈ modelované" : "✎ ručně zapsané"} />
-      <Kpi label="Listin nad 5 %" value={allocation.filter((row) => row.qualified).length} />
-      <Kpi label="Předpokládaně zvolených" value={`${elected.length} / 45`} />
     </section>
 
     {modelUnavailable && <Notice tone="wait" title="Model zatím nemá vstup"><span>Po zadání prvního okrsku v interním briefingu se zde přepočítá pracovní odhad složení zastupitelstva.</span></Notice>}

@@ -65,11 +65,12 @@ export function BriefingAccessGate({ children }: { children: ReactNode }) {
   }
 
   if (state.kind === "open") return <TeamSessionContext.Provider value={{ name: state.name, logout }}>{children}</TeamSessionContext.Provider>;
-  if (state.kind === "checking") return <main className="gate"><section className="gate-card"><div className="eyebrow">Interní volební briefing</div><p>Ověřuji přístup…</p></section></main>;
-  if (state.kind === "misconfigured") return <main className="gate"><section className="gate-card"><div className="eyebrow">Interní volební briefing</div><h1>Server není připravený</h1><p className="gate-error" role="alert">{state.message}</p></section></main>;
+  if (state.kind === "checking") return <main className="gate"><p className="gate-ident"><span className="brand-mark">Výsledky <span className="brand-slash">/</span> Praha 6</span><span>Volební noc Praha 6 · interní nástroj</span></p><section className="gate-card"><div className="eyebrow">Interní volební briefing</div><p>Ověřuji přístup…</p></section></main>;
+  if (state.kind === "misconfigured") return <main className="gate"><p className="gate-ident"><span className="brand-mark">Výsledky <span className="brand-slash">/</span> Praha 6</span><span>Volební noc Praha 6 · interní nástroj</span></p><section className="gate-card"><div className="eyebrow">Interní volební briefing</div><h1>Server není připravený</h1><p className="gate-error" role="alert">{state.message}</p></section></main>;
 
-  return <main className="gate"><section className="gate-card"><div className="eyebrow">Interní volební briefing</div><h1>Vstup pro tým</h1><p>Přihlaste se týmovým heslem. Jméno se ukládá ke každému vašemu zápisu do auditní stopy.</p><form onSubmit={unlock}>
-    <label>Vaše jméno<input autoFocus value={name} onChange={(event) => setName(event.target.value)} autoComplete="name" maxLength={60} required /></label>
+  return <main className="gate"><p className="gate-ident"><span className="brand-mark">Výsledky <span className="brand-slash">/</span> Praha 6</span><span>Volební noc Praha 6 · interní nástroj</span></p><section className="gate-card"><div className="eyebrow">Interní volební briefing</div><h1>Vstup pro tým</h1><p>Přihlaste se týmovým heslem.</p><form onSubmit={unlock}>
+    <label>Vaše jméno<input autoFocus value={name} onChange={(event) => setName(event.target.value)} autoComplete="name" maxLength={60} required aria-describedby="gate-audit" /></label>
+    <p className="gate-audit" id="gate-audit"><b>Jméno je podpis do auditní stopy.</b> Každý zápis, úprava i smazání okrsku se uloží s tímto jménem a časem a celý tým je uvidí. Použijte skutečné jméno, ne přezdívku.</p>
     <label>Týmové heslo<input type="password" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="current-password" required /></label>
     {error && <p className="gate-error" role="alert">{error}</p>}
     <button className="primary" type="submit" disabled={submitting}>{submitting ? "Ověřuji…" : "Vstoupit do briefingu"}</button>

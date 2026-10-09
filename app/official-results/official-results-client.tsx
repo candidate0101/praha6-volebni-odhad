@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { PrecinctMap } from "../precinct-map";
 import { AppShell, EmptyState, Kpi, ListName, Notice, SourceTag, StateTag } from "../ui";
+import { ageLabel } from "../../lib/data-status";
 import { initialVoteRows } from "../../lib/demo-data";
 import { allocateDhondt } from "../../lib/dhondt";
 import { computeForecast } from "../../lib/forecast";
@@ -91,22 +92,26 @@ export default function OfficialResultsClient({ initialDashboard, totalPrecincts
   return <AppShell output="official" status={bandStatus}>
     <div className="hero">
       <div className="eyebrow">Komunální volby 2026 · oficiální data ČSÚ / volby.gov.cz</div>
-      <h1 className="title">Oficiální sčítání <em>ČSÚ</em></h1>
+      <h1 className="title">Oficiální sčítání ČSÚ</h1>
+      <p className="title-sub">Přijaté revize ČSÚ s auditem každé dávky.</p>
       <p className="lead">Jen přijaté oficiální revize z importu ČSÚ. Ruční zápisy z interního briefingu sem nevstupují a tato data nevstupují do nich.</p>
     </div>
 
     <Notice tone={banner.tone} title={banner.title} role="status"><span>{banner.body}</span>{view && <small>Stránka obnovena v {formatTime(view.receivedAt)} · další obnovení do 60 s</small>}</Notice>
 
-    <section className="kpis" aria-label="Souhrn oficiálního sčítání">
-      <Kpi label="Oficiálně zpracováno" value={`${dashboard.processedPrecincts} / ${totalPrecincts}`} note={<SourceTag kind="official" />} accent />
-      <Kpi label="Sečteno okrsků" value={`${formatPercent(dashboard.coveragePercent)} %`} note={counting} />
-      <Kpi label="Platné hlasy" value={formatNumber.format(totalVotes)} />
-      <Kpi label="Poslední dávka ČSÚ" value={dashboard.latestBatch ? `č. ${dashboard.latestBatch.batchNumber}` : "—"} note={dashboard.latestBatch ? `staženo ${formatTime(dashboard.latestBatch.fetchedAt)}` : "čeká na data"} />
+    <section className="kpis kpis--verified" aria-label="Souhrn oficiálního sčítání">
+      <Kpi primary label="Oficiálně zpracováno" value={`${dashboard.processedPrecincts} / ${totalPrecincts}`} note={<>{formatPercent(dashboard.coveragePercent)} % okrsků · {counting} · <SourceTag kind="official" /></>} />
+      <Kpi label="Poslední import ČSÚ" value={formatTime(dashboard.latestBatch?.fetchedAt)} note={dashboard.latestBatch ? `dávka č. ${dashboard.latestBatch.batchNumber} · ${ageLabel(dashboard.latestBatch.fetchedAt, now)}` : dashboard.lastAttempt ? `bez dávky · poslední dotaz ${formatTime(dashboard.lastAttempt.attemptedAt)}` : "importér zatím neběžel"} />
+      {/* "Nothing to verify" only once the importer has actually run against a live database. */}
+      {!view || !dashboard.lastAttempt
+        ? <Kpi label="Rozpory · odmítnuté dávky" value="—" tone="wait" note={loading ? "načítám stav importu" : "bez importu nelze ověřit"} />
+        : <Kpi label="Rozpory · odmítnuté dávky" value={`${dashboard.discrepancyPrecincts} · ${rejected.length}`} tone={dashboard.discrepancyPrecincts || rejected.length ? "danger" : "ok"} note={dashboard.discrepancyPrecincts || rejected.length ? "detail ve frontě k ověření níže" : "nic k ověření"} />}
+      <Kpi label="Platné hlasy" value={formatNumber.format(totalVotes)} note="jen z přijatých okrsků" />
     </section>
 
     <div className="columns">
       <div className="stack">
-        <PrecinctMap entries={entries} flags={flags} title="Mapa oficiálně sečtených okrsků" badge={<SourceTag kind="official" />} description="Oficiálně sečtený okrsek se vybarví podle vedoucí listiny. Nesečtené okrsky a shoda na prvním místě zůstávají neutrální; okrsky s rozporem jsou šrafované a nezapočítávají se." />
+        <PrecinctMap entries={entries} flags={flags} currentSource="oficiálně sečteno ČSÚ" title="Mapa oficiálně sečtených okrsků" badge={<SourceTag kind="official" />} updatedLabel={dashboard.latestBatch ? `import ${formatTime(dashboard.latestBatch.fetchedAt)}` : "zatím bez importu"} description="Oficiálně sečtený okrsek se vybarví podle vedoucí listiny. Nesečtené okrsky mají čárkovaný obrys, shoda na prvním místě zůstává neutrální a okrsky s rozporem jsou šrafované a nezapočítávají se." />
 
         <section className="panel" aria-labelledby="official-sum-title">
           <div className="section-head"><h2 className="sectiontitle" id="official-sum-title">Průběžný oficiální součet</h2><SourceTag kind="official" /></div>
