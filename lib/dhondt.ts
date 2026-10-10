@@ -1,5 +1,8 @@
 export type VoteRow = { id: string; label: string; votes: number; colour: string };
 export type SeatResult = VoteRow & { seats: number; share: number };
+export type MunicipalSeatResult = SeatResult & { qualified: boolean };
+
+const MUNICIPAL_THRESHOLD_PERCENT = 5;
 
 export function allocateDhondt(rows: VoteRow[], seatCount: number): SeatResult[] {
   const total = rows.reduce((sum, row) => sum + row.votes, 0);
@@ -15,4 +18,22 @@ export function allocateDhondt(rows: VoteRow[], seatCount: number): SeatResult[]
     }
   }
   return rows.map((row) => ({ ...row, seats: seats.get(row.id) ?? 0, share: total ? (row.votes / total) * 100 : 0 }));
+}
+
+export function allocateMunicipalMandates(rows: VoteRow[], seatCount: number): MunicipalSeatResult[] {
+  const total = rows.reduce((sum, row) => sum + row.votes, 0);
+  const qualifiedIds = new Set(
+    rows
+      .filter((row) => total > 0 && row.votes * 100 >= total * MUNICIPAL_THRESHOLD_PERCENT)
+      .map((row) => row.id),
+  );
+  const allocated = allocateDhondt(rows.filter((row) => qualifiedIds.has(row.id)), seatCount);
+  const seatsById = new Map(allocated.map((row) => [row.id, row.seats]));
+
+  return rows.map((row) => ({
+    ...row,
+    seats: seatsById.get(row.id) ?? 0,
+    share: total > 0 ? (row.votes / total) * 100 : 0,
+    qualified: qualifiedIds.has(row.id),
+  }));
 }

@@ -5,7 +5,7 @@ import { PrecinctMap } from "../precinct-map";
 import { AppShell, EmptyState, Kpi, ListName, Notice, SourceTag, StateTag } from "../ui";
 import { ageLabel } from "../../lib/data-status";
 import { initialVoteRows } from "../../lib/demo-data";
-import { allocateDhondt } from "../../lib/dhondt";
+import { allocateMunicipalMandates } from "../../lib/dhondt";
 import { computeForecast } from "../../lib/forecast";
 import { officialForecastEntries, type OfficialDashboard } from "../../lib/official-results";
 import "./official-results.css";
@@ -74,7 +74,7 @@ export default function OfficialResultsClient({ initialDashboard, totalPrecincts
   const totalVotes = entries.reduce((sum, entry) => sum + entry.validVotes, 0);
   const listIds = initialVoteRows.map((row) => row.id);
   const currentRows = useMemo(() => initialVoteRows.map((row, index) => ({ ...row, votes: entries.reduce((sum, entry) => sum + (entry.listVotes[index] ?? 0), 0) })), [entries]);
-  const allocation = useMemo(() => allocateDhondt(currentRows, OFFICIAL_SEATS), [currentRows]);
+  const allocation = useMemo(() => allocateMunicipalMandates(currentRows, OFFICIAL_SEATS), [currentRows]);
   const forecast = useMemo(() => computeForecast(listIds, entries, OFFICIAL_SEATS), [entries, listIds]);
   const banner = connectionBanner(view, loading, fetchFailed, now);
   const queue = dashboard.precincts.filter((precinct) => precinct.validationStatus === "discrepancy" || precinct.resent);
@@ -119,12 +119,12 @@ export default function OfficialResultsClient({ initialDashboard, totalPrecincts
             <div className="row headerrow" role="row"><span role="columnheader">Listina</span><span role="columnheader">Podíl</span><span role="columnheader">Hlasy</span><span role="columnheader">Mandáty*</span></div>
             {[...allocation].sort((left, right) => right.votes - left.votes).map((row) => <div className="row" role="row" key={row.id}>
               <b role="cell"><ListName label={row.label} colour={row.colour} /></b>
-              <span role="cell" className="share-cell"><span><span className="row-label">Podíl</span>{formatPercent(row.share)} %</span><span className="bar-track" aria-hidden="true"><i className="bar" style={{ width: `${Math.min(100, row.share * 2)}%`, background: row.colour }} /></span></span>
+              <span role="cell" className="share-cell"><span><span className="row-label">Podíl</span>{formatPercent(row.share)} %{!row.qualified && <small className="interval"> · pod 5 %</small>}</span><span className="bar-track" aria-hidden="true"><i className="bar" style={{ width: `${Math.min(100, row.share * 2)}%`, background: row.colour }} /></span></span>
               <span role="cell"><span className="row-label">Hlasy</span>{formatNumber.format(row.votes)}</span>
               <b role="cell"><span className="row-label">Mandáty</span>{row.seats}</b>
             </div>)}
           </div>}
-          <p className="foot">* Průběžný přepočet 45 mandátů z dosud oficiálně sečtených okrsků; nepredikuje se do nesečtených okrsků a není to konečný výsledek.</p>
+          <p className="foot">* Průběžný přepočet 45 mandátů z dosud oficiálně sečtených okrsků; mandáty se rozdělují jen mezi listiny s alespoň 5 % z aktuálního součtu. Nepredikuje se do nesečtených okrsků a nejde o konečný výsledek.</p>
         </section>
 
         <section className="panel" aria-labelledby="audit-title">
