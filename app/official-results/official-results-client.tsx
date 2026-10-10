@@ -5,7 +5,7 @@ import { PrecinctMap } from "../precinct-map";
 import { AppShell, EmptyState, Kpi, ListName, Notice, SourceTag, StateTag } from "../ui";
 import { ageLabel } from "../../lib/data-status";
 import { initialVoteRows } from "../../lib/demo-data";
-import { allocateDhondt } from "../../lib/dhondt";
+import { allocateMunicipalMandates } from "../../lib/dhondt";
 import { computeForecast } from "../../lib/forecast";
 import { officialForecastEntries, type OfficialDashboard } from "../../lib/official-results";
 import "./official-results.css";
@@ -74,7 +74,7 @@ export default function OfficialResultsClient({ initialDashboard, totalPrecincts
   const totalVotes = entries.reduce((sum, entry) => sum + entry.validVotes, 0);
   const listIds = initialVoteRows.map((row) => row.id);
   const currentRows = useMemo(() => initialVoteRows.map((row, index) => ({ ...row, votes: entries.reduce((sum, entry) => sum + (entry.listVotes[index] ?? 0), 0) })), [entries]);
-  const allocation = useMemo(() => allocateDhondt(currentRows, OFFICIAL_SEATS), [currentRows]);
+  const allocation = useMemo(() => allocateMunicipalMandates(currentRows, OFFICIAL_SEATS), [currentRows]);
   const forecast = useMemo(() => computeForecast(listIds, entries, OFFICIAL_SEATS), [entries, listIds]);
   const banner = connectionBanner(view, loading, fetchFailed, now);
   const queue = dashboard.precincts.filter((precinct) => precinct.validationStatus === "discrepancy" || precinct.resent);
@@ -119,12 +119,12 @@ export default function OfficialResultsClient({ initialDashboard, totalPrecincts
             <div className="row headerrow" role="row"><span role="columnheader">Listina</span><span role="columnheader">Podíl</span><span role="columnheader">Hlasy</span><span role="columnheader">Mandáty*</span></div>
             {[...allocation].sort((left, right) => right.votes - left.votes).map((row) => <div className="row" role="row" key={row.id}>
               <b role="cell"><ListName label={row.label} colour={row.colour} /></b>
-              <span role="cell" className="share-cell"><span><span className="row-label">Podíl</span>{formatPercent(row.share)} %</span><span className="bar-track" aria-hidden="true"><i className="bar" style={{ width: `${Math.min(100, row.share * 2)}%`, background: row.colour }} /></span></span>
+              <span role="cell" className="share-cell"><span><span className="row-label">Podíl</span>{formatPercent(row.share)} %{!row.qualified && <small className="interval"> · pod 5 %</small>}</span><span className="bar-track" aria-hidden="true"><i className="bar" style={{ width: `${Math.min(100, row.share * 2)}%`, background: row.colour }} /></span></span>
               <span role="cell"><span className="row-label">Hlasy</span>{formatNumber.format(row.votes)}</span>
               <b role="cell"><span className="row-label">Mandáty</span>{row.seats}</b>
             </div>)}
           </div>}
-          <p className="foot">* Průběžný přepočet 45 mandátů z dosud oficiálně sečtených okrsků; nepredikuje se do nesečtených okrsků a není to konečný výsledek.</p>
+          <p className="foot">* Průběžný přepočet 45 mandátů z dosud oficiálně sečtených okrsků; mandáty se rozdělují jen mezi listiny s alespoň 5 % z aktuálního vstupu. Nepredikuje se do nesečtených okrsků a nejde o konečný výsledek.</p>
         </section>
 
         <section className="panel" aria-labelledby="audit-title">
@@ -154,7 +154,7 @@ export default function OfficialResultsClient({ initialDashboard, totalPrecincts
         <section className="panel" aria-labelledby="official-model-title">
           <div className="section-head"><h2 className="sectiontitle" id="official-model-title">Model nad oficiálními daty</h2><SourceTag kind="model" /></div>
           <Notice tone="warn" title="Modelovaný odhad, ne oficiální výsledek"><span>Samostatná instance modelu pouze z bezrozporných oficiálních okrsků. Ruční zápisy do něj nevstupují.</span></Notice>
-          {forecast ? <div className="data-table" style={{ marginTop: 12 }}>{forecast.lists.map((listForecast) => { const row = initialVoteRows.find((item) => item.id === listForecast.id)!; return <div className="row forecast-compact" key={row.id}><b><ListName label={row.label} colour={row.colour} /></b><span className="share-cell"><span>≈ {formatPercent(listForecast.pointShare)} %</span><span className="interval">{formatPercent(listForecast.p10Share)}–{formatPercent(listForecast.p90Share)} % · {listForecast.lowSeats}–{listForecast.highSeats} mand.</span></span></div>; })}</div> : <EmptyState title="Model je vypnutý">Zapne se až po prvním bezrozporném oficiálním okrsku. Do té doby nic nedopočítává.</EmptyState>}
+          {forecast ? <><div className="data-table" style={{ marginTop: 12 }}>{forecast.lists.map((listForecast) => { const row = initialVoteRows.find((item) => item.id === listForecast.id)!; return <div className="row forecast-compact" key={row.id}><b><ListName label={row.label} colour={row.colour} /></b><span className="share-cell"><span>≈ {formatPercent(listForecast.pointShare)} %{!listForecast.qualified && <small className="interval"> · pod 5 %</small>}</span><span className="interval">{formatPercent(listForecast.p10Share)}–{formatPercent(listForecast.p90Share)} % · {listForecast.lowSeats}–{listForecast.highSeats} mand.</span></span></div>; })}</div><p className="foot">Mandáty v bodovém odhadu i simulacích se rozdělují jen mezi listiny s alespoň 5 % z příslušného aktuálního vstupu.</p></> : <EmptyState title="Model je vypnutý">Zapne se až po prvním bezrozporném oficiálním okrsku. Do té doby nic nedopočítává.</EmptyState>}
         </section>
       </aside>
     </div>

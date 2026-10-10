@@ -1,5 +1,5 @@
 import type { VoteRow } from "./dhondt";
-import { allocateDhondt } from "./dhondt";
+import { allocateMunicipalMandates } from "./dhondt";
 import { simulateSeatIntervals } from "./forecast-simulation";
 import { historicalProfileType, pooledSwing } from "./precinct-typology";
 import { assessForecastConfidence, recentHistoricalShare, recentHistoricalValidVotes, type ForecastConfidence, weightedMean } from "./forecast-primitives";
@@ -32,6 +32,7 @@ export type ForecastListResult = {
   pointSeats: number;
   lowSeats: number;
   highSeats: number;
+  qualified: boolean;
   hasHistory: boolean;
 };
 
@@ -144,7 +145,7 @@ export function computeForecast(listIds: string[], entered: EnteredPrecinct[], s
   const finalValidVotes = enteredValidVotesTotal + remainingValidVotesTotal;
 
   const rowsFor = (votes: number[]): VoteRow[] => listIds.map((id, index) => ({ id, label: id, votes: votes[index], colour: "" }));
-  const pointSeats = allocateDhondt(rowsFor(pointVotesByList), seatCount);
+  const pointSeats = allocateMunicipalMandates(rowsFor(pointVotesByList), seatCount);
   const simulatedSeatIntervals = simulateSeatIntervals({
     listIds,
     pointVotes: pointVotesByList,
@@ -184,6 +185,7 @@ export function computeForecast(listIds: string[], entered: EnteredPrecinct[], s
       pointSeats: pointSeats[index].seats,
       lowSeats: seatIntervalsById.get(id)?.lowSeats ?? pointSeats[index].seats,
       highSeats: seatIntervalsById.get(id)?.highSeats ?? pointSeats[index].seats,
+      qualified: pointSeats[index].qualified,
       hasHistory,
     };
   });

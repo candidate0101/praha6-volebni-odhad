@@ -9,7 +9,7 @@ Stav: interní experiment. Není určen pro veřejné vyhlašování vítězů a
 3. Změny váží odmocninou počtu platných hlasů: větší okrsek má větší, ale nikoli lineárně dominantní vliv.
 4. U nezadaných okrsků částečně sdílí odchylku jen s okrsky stejného historického typu: typ určuje historicky vedoucí srovnatelná listina. Lokální odchylka se vždy ztlumí směrem k celopražskošestkovému průměru, takže jeden okrsek nevytvoří vlastní prognózu.
 5. Doplní nezadané okrsky podle jejich historického profilu a pozorované změny, zpočátku utlumené faktorem n/(n+6).
-6. Přepočte očekávané hlasy na 45 mandátů D'Hondtovou metodou.
+6. Listiny s alespoň 5 % z aktuálního vstupu přepočte na 45 mandátů D'Hondtovou metodou; listiny pod 5 % dostanou nula mandátů.
 
 ## Kontrola použitelnosti
 
@@ -22,7 +22,7 @@ Vedle počtu okrsků se počítá:
 
 ## Mandátová nejistota
 
-Mandátové rozpětí vzniká z 1 000 deterministicky opakovatelných kompozičních simulací. Náhodné odchylky podílů jsou po losování normalizovány, takže všechny listiny dohromady vždy tvoří 100 % a každá simulace přidělí právě 45 mandátů.
+Mandátové rozpětí vzniká z 1 000 deterministicky opakovatelných kompozičních simulací. Náhodné odchylky podílů jsou po losování normalizovány, takže všechny listiny dohromady vždy tvoří 100 %. V každé simulaci se všech 45 mandátů rozdělí jen mezi listiny s alespoň 5 % daného simulovaného vstupu.
 
 Pásma podílů jsou nadále analytická aproximace. Simulace není kalibrovaný volební model.
 

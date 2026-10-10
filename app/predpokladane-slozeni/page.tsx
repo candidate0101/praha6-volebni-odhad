@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import candidateData from "../../data/candidates-2026.json";
 import { allocateCouncilComposition, orderCandidatesByPreference } from "../../lib/council-composition";
 import { initialVoteRows } from "../../lib/demo-data";
-import { allocateDhondt } from "../../lib/dhondt";
 import { computeForecast } from "../../lib/forecast";
 import { ELECTED_STATUS_LABEL } from "../../lib/outputs";
 import { BriefingAccessGate } from "../briefing-access-gate";
@@ -36,14 +35,13 @@ function CouncilComposition() {
   const voteRows = useMemo(() => sourceMode === "model" && forecast
     ? initialVoteRows.map((row) => ({ ...row, votes: Math.round(forecast.lists.find((item) => item.id === row.id)?.pointVotes ?? 0) }))
     : currentRows, [currentRows, forecast, sourceMode]);
-  const allocation = useMemo(() => allocateCouncilComposition(voteRows, 45, 0.05), [voteRows]);
+  const allocation = useMemo(() => allocateCouncilComposition(voteRows, 45), [voteRows]);
   const elected = useMemo(() => allocation.flatMap((row) => orderCandidatesByPreference(
     candidates.filter((candidate) => candidate.list_id === row.id).map((candidate) => ({ listId: candidate.list_id, ballotOrder: candidate.ballot_order, name: candidate.name })),
     row.votes,
     [],
   ).slice(0, row.seats).map((candidate) => ({ ...candidate, listLabel: row.label }))), [allocation]);
   const totalVotes = voteRows.reduce((sum, row) => sum + row.votes, 0);
-  const provisionalSeats = allocateDhondt(voteRows, 45);
 
   const modelUnavailable = sourceMode === "model" && !forecast;
   const seats = allocation.flatMap((row) => Array.from({ length: row.seats }, (_, index) => ({ id: `${row.id}-${index}`, colour: row.colour, label: row.label })));
@@ -68,7 +66,7 @@ function CouncilComposition() {
       <Kpi primary label="Předpokládaně zvolených" value={`${elected.length} / 45`} note={<>z {entries.length} zapsaných okrsků · <SourceTag kind="estimate" /></>} />
       <Kpi label="Vstup naposledy změněn" value={lastChange ? new Date(lastChange).toLocaleTimeString("cs-CZ", { hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "—"} note={lastChange ? `${ageLabel(lastChange, now)} · ${sourceMode === "model" ? "≈ model" : "✎ ruční zápisy"}` : entries.length ? "místní zápisy bez času" : "zatím žádný zápis"} />
       <Kpi label="Kandidátní hlasy" value="nejsou" tone="warn" note="pořadí podle kandidátky; může se změnit" />
-      <Kpi label="Listin nad 5 %" value={allocation.filter((row) => row.qualified).length} note={`${sourceMode === "model" ? "≈ " : ""}${number.format(totalVotes)} vstupních hlasů`} />
+      <Kpi label="Listin s alespoň 5 %" value={allocation.filter((row) => row.qualified).length} note={`${sourceMode === "model" ? "≈ " : ""}${number.format(totalVotes)} vstupních hlasů`} />
     </section>
 
     <section className="panel council-source" aria-labelledby="source-title">
@@ -90,12 +88,12 @@ function CouncilComposition() {
           <div className="row headerrow" role="row"><span role="columnheader">Listina</span><span role="columnheader">Podíl / práh</span><span role="columnheader">Hlasy</span><span role="columnheader">Mandáty</span></div>
           {[...allocation].sort((left, right) => right.seats - left.seats || right.votes - left.votes).map((row) => <div className="row" role="row" key={row.id}>
             <b role="cell"><ListName label={row.label} colour={row.colour} /></b>
-            <span role="cell" className="share-cell"><span><span className="row-label">Podíl</span>{percent(row.share)} % · {row.qualified ? "nad prahem" : <span className="interval">pod prahem</span>}</span><span className="bar-track" aria-hidden="true"><i className="bar" style={{ width: `${Math.min(100, row.share * 2)}%`, background: row.colour }} /></span></span>
+            <span role="cell" className="share-cell"><span><span className="row-label">Podíl</span>{percent(row.share)} % · {row.qualified ? "splňuje práh" : <span className="interval">pod prahem</span>}</span><span className="bar-track" aria-hidden="true"><i className="bar" style={{ width: `${Math.min(100, row.share * 2)}%`, background: row.colour }} /></span></span>
             <span role="cell"><span className="row-label">Hlasy</span>{sourceMode === "model" ? "≈ " : ""}{number.format(row.votes)}</span>
             <b role="cell" className="num-big"><span className="row-label">Mandáty</span>{row.seats}</b>
           </div>)}
         </div>
-        <p className="foot">Mandáty se počítají výhradně mezi listinami s alespoň 5 % z aktuálního vstupu. {provisionalSeats.some((row) => row.votes > 0) ? "Rozdělení se přepočítá při každé změně vstupních hlasů." : "Bez listinných hlasů nejsou přiděleny žádné mandáty."}</p>
+        <p className="foot">Mandáty se rozdělují jen mezi listiny s alespoň 5 % z aktuálního vstupu. {totalVotes > 0 ? "Rozdělení se přepočítá při každé změně vstupních hlasů." : "Bez listinných hlasů nejsou přiděleny žádné mandáty."}</p>
       </section>
 
       <section className="panel" aria-labelledby="people-title">

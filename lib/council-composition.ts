@@ -1,4 +1,4 @@
-import { allocateDhondt, type SeatResult, type VoteRow } from "./dhondt";
+import { allocateMunicipalMandates, MUNICIPAL_THRESHOLD, type QualifiedSeatResult, type VoteRow } from "./dhondt";
 
 export type CouncilCandidate = {
   listId: string;
@@ -12,19 +12,10 @@ export type CandidatePreferenceVote = {
   votes: number;
 };
 
-export type CouncilSeatResult = SeatResult & { qualified: boolean };
+export type CouncilSeatResult = QualifiedSeatResult;
 
-export function allocateCouncilComposition(rows: VoteRow[], seatCount = 45, clause = 0.05): CouncilSeatResult[] {
-  const totalVotes = rows.reduce((sum, row) => sum + row.votes, 0);
-  const qualifiedIds = new Set(rows.filter((row) => totalVotes > 0 && row.votes / totalVotes >= clause).map((row) => row.id));
-  const qualifiedResults = allocateDhondt(rows.filter((row) => qualifiedIds.has(row.id)), seatCount);
-  const seatsById = new Map(qualifiedResults.map((row) => [row.id, row.seats]));
-  return rows.map((row) => ({
-    ...row,
-    seats: seatsById.get(row.id) ?? 0,
-    share: totalVotes ? row.votes / totalVotes * 100 : 0,
-    qualified: qualifiedIds.has(row.id),
-  }));
+export function allocateCouncilComposition(rows: VoteRow[], seatCount = 45, clause = MUNICIPAL_THRESHOLD): CouncilSeatResult[] {
+  return allocateMunicipalMandates(rows, seatCount, clause);
 }
 
 export function orderCandidatesByPreference(candidates: CouncilCandidate[], listVotes: number, preferenceVotes: CandidatePreferenceVote[]): CouncilCandidate[] {

@@ -1,4 +1,4 @@
-import { allocateDhondt } from "./dhondt";
+import { allocateMunicipalMandates } from "./dhondt";
 
 export type SeatInterval = { id: string; pointSeats: number; lowSeats: number; highSeats: number };
 
@@ -33,13 +33,13 @@ function quantile(values: number[], fraction: number): number {
 
 export function simulateSeatIntervals(input: Input): SeatInterval[] {
   const next = random(input.seed);
-  const pointSeats = allocateDhondt(input.listIds.map((id, index) => ({ id, label: id, votes: input.pointVotes[index], colour: "" })), input.seatCount).map((row) => row.seats);
+  const pointSeats = allocateMunicipalMandates(input.listIds.map((id, index) => ({ id, label: id, votes: input.pointVotes[index], colour: "" })), input.seatCount).map((row) => row.seats);
   const seatRuns = input.listIds.map(() => [] as number[]);
   const pointShares = input.pointVotes.map((votes) => input.totalVotes > 0 ? votes / input.totalVotes : 0);
   for (let run = 0; run < input.runs; run += 1) {
     const raw = pointShares.map((share, index) => Math.max(0, share + normal(next) * input.shareSigmas[index]));
     const rawTotal = raw.reduce((sum, share) => sum + share, 0) || 1;
-    const allocation = allocateDhondt(input.listIds.map((id, index) => ({ id, label: id, votes: raw[index] / rawTotal * input.totalVotes, colour: "" })), input.seatCount);
+    const allocation = allocateMunicipalMandates(input.listIds.map((id, index) => ({ id, label: id, votes: raw[index] / rawTotal * input.totalVotes, colour: "" })), input.seatCount);
     allocation.forEach((row, index) => seatRuns[index].push(row.seats));
   }
   return input.listIds.map((id, index) => ({

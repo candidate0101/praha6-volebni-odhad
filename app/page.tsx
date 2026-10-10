@@ -2,7 +2,7 @@
 
 import { FormEvent, useMemo, useState } from "react";
 import { initialVoteRows, totalPrecincts } from "../lib/demo-data";
-import { allocateDhondt, type VoteRow } from "../lib/dhondt";
+import { allocateMunicipalMandates, type VoteRow } from "../lib/dhondt";
 import { computeForecast, type EnteredPrecinct } from "../lib/forecast";
 import { isPraha6Precinct } from "../lib/manual-entries";
 import { validateSubmission } from "../lib/precinct-submission";
@@ -59,7 +59,7 @@ function Briefing() {
     })),
     [entries],
   );
-  const allocation = useMemo(() => allocateDhondt(rows, SEAT_COUNT).sort((a, b) => b.votes - a.votes), [rows]);
+  const allocation = useMemo(() => allocateMunicipalMandates(rows, SEAT_COUNT).sort((a, b) => b.votes - a.votes), [rows]);
   const totalVotes = rows.reduce((sum, row) => sum + row.votes, 0);
 
   const forecast = useMemo(() => computeForecast(listIds, entries, SEAT_COUNT), [listIds, entries]);
@@ -168,12 +168,12 @@ function Briefing() {
             <div className="row headerrow" role="row"><span role="columnheader">Listina</span><span role="columnheader">Dosavadní podíl</span><span role="columnheader">Hlasy</span><span role="columnheader">Mandáty</span></div>
             {allocation.map((row) => <div className="row" role="row" key={row.id}>
               <b role="cell"><ListName label={row.label} colour={row.colour} /></b>
-              <span role="cell" className="share-cell"><span><span className="row-label">Podíl</span>{formatPercent(row.share)} %</span><span className="bar-track" aria-hidden="true"><i className="bar" style={{ width: `${Math.min(100, row.share * 2)}%`, background: row.colour }} /></span></span>
+              <span role="cell" className="share-cell"><span><span className="row-label">Podíl</span>{formatPercent(row.share)} %{!row.qualified && <small className="interval"> · pod 5 %</small>}</span><span className="bar-track" aria-hidden="true"><i className="bar" style={{ width: `${Math.min(100, row.share * 2)}%`, background: row.colour }} /></span></span>
               <span role="cell"><span className="row-label">Hlasy</span>{formatNumber.format(row.votes)}</span>
               <b role="cell"><span className="row-label">Mandáty</span>{row.seats}</b>
             </div>)}
           </div>}
-          <p className="foot">Čistý součet vložených okrsků metodou D&apos;Hondt — ne odhad celé Prahy 6.</p>
+          <p className="foot">Čistý součet vložených okrsků metodou D&apos;Hondt — ne odhad celé Prahy 6. Mandáty se rozdělují jen mezi listiny s alespoň 5 % z aktuálního vstupu.</p>
         </section>
 
         <section className="panel" aria-labelledby="model-title">
@@ -189,13 +189,13 @@ function Briefing() {
                 if (!listForecast) return null;
                 return <div className="row" role="row" key={row.id}>
                   <b role="cell"><ListName label={row.label} colour={row.colour} />{!listForecast.hasHistory && <small className="interval"> · bez historie</small>}</b>
-                  <span role="cell" className="share-cell"><span><span className="row-label">Odhad</span>≈ {formatPercent(listForecast.pointShare)} %</span><span className="bar-track" aria-hidden="true"><i className="bar" style={{ width: `${Math.min(100, listForecast.pointShare * 2)}%`, background: row.colour, opacity: 0.75 }} /></span><span className="interval">{formatPercent(listForecast.p10Share)}–{formatPercent(listForecast.p90Share)} %</span></span>
+                  <span role="cell" className="share-cell"><span><span className="row-label">Odhad</span>≈ {formatPercent(listForecast.pointShare)} %{!listForecast.qualified && <small className="interval"> · pod 5 %</small>}</span><span className="bar-track" aria-hidden="true"><i className="bar" style={{ width: `${Math.min(100, listForecast.pointShare * 2)}%`, background: row.colour, opacity: 0.75 }} /></span><span className="interval">{formatPercent(listForecast.p10Share)}–{formatPercent(listForecast.p90Share)} %</span></span>
                   <span role="cell"><span className="row-label">Hlasy</span>≈ {formatNumber.format(Math.round(listForecast.pointVotes))}</span>
                   <b role="cell"><span className="row-label">Mandáty</span>{listForecast.pointSeats}{listForecast.lowSeats !== listForecast.highSeats && <small className="interval"> ({listForecast.lowSeats}–{listForecast.highSeats})</small>}</b>
                 </div>;
               })}
             </div>
-            <p className="foot">Model používá jako hlavní historickou kotvu rok 2022; rok 2018 je jen záloha tam, kde srovnatelný údaj z roku 2022 chybí. Okrskové odchylky jsou váženy odmocninou počtu hlasů. Kontrola reprezentativnosti porovnává historický profil zadaných okrsků s celou Prahou 6. Pásmo 80 % je analytická aproximace, nikoli plná Monte Carlo simulace; nové či nesrovnatelné listiny mají slabší oporu. Politická křížová mapa listin je pracovní návrh a musí ji potvrdit tým.</p>
+            <p className="foot">Mandáty v bodovém odhadu i simulacích se rozdělují jen mezi listiny s alespoň 5 % z příslušného aktuálního vstupu. Model používá jako hlavní historickou kotvu rok 2022; rok 2018 je jen záloha tam, kde srovnatelný údaj z roku 2022 chybí. Okrskové odchylky jsou váženy odmocninou počtu hlasů. Kontrola reprezentativnosti porovnává historický profil zadaných okrsků s celou Prahou 6. Pásmo 80 % je analytická aproximace, nikoli plná Monte Carlo simulace; nové či nesrovnatelné listiny mají slabší oporu. Politická křížová mapa listin je pracovní návrh a musí ji potvrdit tým.</p>
           </>}
         </section>
       </div>

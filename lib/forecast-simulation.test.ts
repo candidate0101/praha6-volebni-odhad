@@ -16,4 +16,19 @@ describe("simulateSeatIntervals", () => {
     expect(intervals.reduce((sum, item) => sum + item.pointSeats, 0)).toBe(45);
     expect(intervals.every((item) => item.lowSeats <= item.highSeats)).toBe(true);
   });
+
+  it("never gives a seat to a below-five-percent list in the point estimate or simulations", () => {
+    const intervals = simulateSeatIntervals({
+      listIds: ["a", "b"],
+      pointVotes: [951, 49],
+      shareSigmas: [0, 0],
+      totalVotes: 1000,
+      seatCount: 45,
+      runs: 50,
+      seed: 11,
+    });
+
+    expect(intervals[1]).toEqual({ id: "b", pointSeats: 0, lowSeats: 0, highSeats: 0 });
+    expect(intervals.reduce((sum, item) => sum + item.pointSeats, 0)).toBe(45);
+  });
 });
