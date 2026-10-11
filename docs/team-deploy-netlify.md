@@ -9,7 +9,7 @@ Cíl: všichni přihlášení vidí stejné ruční zápisy a obnovení okna ani
 - **Souběžné úpravy:** zápis nese revizi, kterou člověk viděl. Když okrsek mezitím změnil někdo jiný, server zápis odmítne. U formuláře se pak objeví „Konflikt · okrsek X mezitím změnil(a) Y“ i s neuloženými hodnotami. Totéž databáze vynutí i při dvou úplně současných zápisech (`unique (precinct_number, based_on_revision)`).
 - **Výpadek spojení:** zápis se nejdřív uloží do fronty v prohlížeči (`localStorage`) a ukáže se jako „neodesláno“. Odešle se sám, jakmile server odpoví. Jednoznačné `clientId` zaručí, že se opakované odeslání neuloží dvakrát. Během výpadku stránka ukazuje poslední známý stav ze serveru.
 - **Starší zápisy z prohlížeče** (z doby před sdíleným úložištěm) nabídne stránka nahrát tlačítkem. Nahraje jen okrsky, které server ještě nemá. Lokální originál zůstane uložený pod klíčem `…entries.v1.uploaded-<čas>`.
-- **Oficiální výsledky** mají vlastní databázi `OFFICIAL_RESULTS_DATABASE_URL`. Importér ČSÚ na Netlify spouští plánovaná funkce `netlify/functions/import-official.mts` každou minutu.
+- **Oficiální výsledky** mohou mít vlastní databázi `OFFICIAL_RESULTS_DATABASE_URL`, ale importér ČSÚ není na Netlify nasazen ani plánován. Nasazení proto neprovádí žádné automatické dotazy na ČSÚ.
 
 ## Nastavení (jednou, před volební nocí)
 
@@ -30,8 +30,8 @@ Cíl: všichni přihlášení vidí stejné ruční zápisy a obnovení okna ani
 4. **Ověření po nasazení:**
    - přihlášení špatným heslem selže;
    - zápis okrsku ze dvou různých zařízení se objeví na obou;
-   - v Netlify → Functions → `import-official` běží každou minutu a v logu hlásí `not_yet_available`, dokud ČSÚ nevydá první dávku;
-   - `/official-results` ukazuje „ČSÚ zatím nevydal žádnou okrskovou dávku“.
+   - v Netlify → Functions není funkce `import-official`;
+   - aplikace nezakládá automatické dotazy na ČSÚ.
 
 Bez proměnných běží aplikace jako dřív: zápisy zůstávají jen v daném prohlížeči a stránka to řekne. Když je databáze nastavená, ale chybí heslo, server odmítne běžet otevřeně a zobrazí chybu nastavení.
 

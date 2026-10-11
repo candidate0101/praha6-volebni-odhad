@@ -38,7 +38,7 @@ Schéma je v `db/official-results.sql`. Všechny tabulky jsou append-only: trigg
 
 1. Založte samostatnou databázi Neon a do `.env.local` zapište `OFFICIAL_RESULTS_DATABASE_URL=…`.
 2. Spusťte `npm run db:official:apply`.
-3. Na Netlify běží importér sám jako plánovaná funkce `netlify/functions/import-official.mts`, každou minutu nejvýše 3 dávky. Lokálně ho spustíte příkazem `npm run import:official`. Ptá se každých 60 s (webcache ČSÚ má 60 s) a po výpadku dožene všechny chybějící dávky. Varianty:
+3. Na Netlify importér neběží: plánovaná funkce byla z repozitáře odstraněna, aby nevznikaly automatické dotazy na ČSÚ a související invokace. Pokud jej bude někdy potřeba použít, lze ho spustit výhradně vědomě lokálně příkazem `npm run import:official`. Varianty:
    - `-- --once` jednorázově stáhne, co je k dispozici;
    - `-- --batch N` stáhne dávku N znovu (uloží se jen tehdy, když se liší bajty nebo verze parseru).
 4. Server Next (`npm run dev` nebo `npm start`) musí mít stejnou proměnnou. `/official-results` se obnovuje každých 60 s.
@@ -46,7 +46,7 @@ Schéma je v `db/official-results.sql`. Všechny tabulky jsou append-only: trigg
 Stavy na stránce:
 - „Importér ani databáze nejsou zapojené“: chybí proměnná.
 - „Bez živého napojení“: neběží server, např. statický náhled na GitHub Pages, kde se `app/api` před buildem odstraňuje.
-- „Importér možná neběží“: poslední dotaz je starší než 3 minuty.
+- „Importér možná neběží“: import nebyl spuštěn ručně nebo je poslední dotaz starší než 3 minuty.
 - „ČSÚ zatím nevydal žádnou okrskovou dávku“: KOD_CHYBY 10 nebo 404.
 
 ## Co je ověřené a co ne

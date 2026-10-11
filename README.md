@@ -6,7 +6,7 @@ Soukromý interní analytický nástroj pro volební večer komunálních voleb 
 
 - přístup: jen interní tým, jedno týmové heslo ověřované serverem a jméno u každého zápisu (viz `docs/team-deploy-netlify.md`);
 - vstup MVP: ruční listinné hlasy + hromadné vložení; kandidátní hlasy až ve druhé fázi;
-- zdroj: ruční zápis (`/`) a oficiální import ČSÚ (`/official-results`) jsou oddělené toky; oficiální data nevstupují do ručních záznamů ani do modelu na `/`;
+- zdroj: ruční zápis (`/`) je provozní zdroj; import ČSÚ není na Netlify nasazen ani plánován, takže nevznikají žádná automatická načítání;
 - historie: každý výsledek je revize, nikdy přepis;
 - politická křížová mapa listin: zatím **čeká na potvrzení týmu**.
 
@@ -16,7 +16,7 @@ Funkční lokální prototyp obsahuje zadávání okrsků, mapu vedení, modelov
 
 ## Týmový provoz
 
-Ruční zápisy se ukládají na sdílený server (Neon + Netlify), takže je vidí každý přihlášený a obnovení okna nic nesmaže. Oficiální výsledky ČSÚ mají vlastní databázi a importér. Nastavení a ověření jsou v `docs/team-deploy-netlify.md`, importér ČSÚ v `docs/official-results-import.md`.
+Ruční zápisy se ukládají na sdílený server (Neon + Netlify), takže je vidí každý přihlášený a obnovení okna nic nesmaže. Oficiální databáze může zůstat pro dříve uložená data, ale automatický import ČSÚ je vypnutý. Nastavení a ověření jsou v `docs/team-deploy-netlify.md`.
 
 ## Ověřená datová zjištění
 

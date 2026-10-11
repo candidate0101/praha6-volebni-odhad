@@ -1,5 +1,5 @@
-# Netlify deploy: Next.js pages and /api routes via Netlify's Next.js runtime (OpenNext),
-# plus the scheduled ČSÚ importer in netlify/functions.
+# Netlify deploy: Next.js pages and /api routes via Netlify's Next.js runtime (OpenNext).
+# ČSÚ importer is deliberately not deployed or scheduled to avoid background invocations.
 # Required environment variables (Site configuration → Environment variables):
 #   TEAM_PASSWORD, SESSION_SECRET, MANUAL_ENTRIES_DATABASE_URL, OFFICIAL_RESULTS_DATABASE_URL
 
